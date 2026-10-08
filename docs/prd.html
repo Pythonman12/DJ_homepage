@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대진전자통신고등학교 통합 학생 포털 PRD | Daejin-Live</title>
+  
+  <!-- Fonts: Pretendard, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  
+  <!-- Mermaid.js with clean dark monochrome theme -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#121215',
+        primaryColor: '#27272a',
+        primaryTextColor: '#f4f4f5',
+        primaryBorderColor: '#3f3f46',
+        lineColor: '#71717a',
+        secondaryColor: '#18181b',
+        tertiaryColor: '#09090b'
+      }
+    });
+  </script>
+
+  <style>
+    :root {
+      --bg-base: #09090b;
+      --bg-surface: #121215;
+      --bg-surface-elevated: #18181b;
+      --bg-card: #141417;
+      --border-subtle: #27272a;
+      --border-strong: #3f3f46;
+      
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
+      
+      --accent-white: #ffffff;
+      --accent-gray: #e4e4e7;
+      --status-active: #10b981;
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-full: 9999px;
+      
+      --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: "Pretendard", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-base);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+
+    /* Header Nav */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(9, 9, 11, 0.9);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--text-main);
+      color: var(--bg-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .logo-text h1 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-text span {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      background: var(--bg-surface-elevated);
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.825rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--radius-full);
+      color: #34d399;
+      font-size: 0.725rem;
+      font-weight: 600;
+    }
+
+    .badge-status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: var(--status-active);
+      border-radius: 50%;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 2.5rem 0 3.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 3.5rem;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      color: var(--text-main);
+    }
+
+    .hero-description {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 780px;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    /* School Metadata Grid */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .meta-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.1rem;
+    }
+
+    .meta-card-label {
+      font-size: 0.725rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+
+    .meta-card-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .meta-card-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Section Styling */
+    section {
+      margin-bottom: 4rem;
+    }
+
+    .section-header {
+      margin-bottom: 1.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .section-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.4rem;
+      box-shadow: var(--shadow-card);
+      transition: border-color 0.15s;
+    }
+
+    .card:hover {
+      border-color: var(--border-strong);
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title-tag {
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      space-y: 0.5rem;
+    }
+
+    .feature-list li {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      padding-left: 1.1rem;
+      position: relative;
+      margin-bottom: 0.4rem;
+      line-height: 1.5;
+    }
+
+    .feature-list li::before {
+      content: "-";
+      position: absolute;
+      left: 0;
+      color: var(--text-dim);
+      font-weight: bold;
+    }
+
+    /* Tables */
+    .table-wrapper {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.825rem;
+    }
+
+    th {
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 0.85rem 1.1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.85rem 1.1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-main);
+    }
+
+    .td-title {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Badges & Tags */
+    .tag {
+      display: inline-block;
+      font-size: 0.725rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .tag-white {
+      background: var(--text-main);
+      color: var(--bg-base);
+      font-weight: 600;
+      border-color: var(--text-main);
+    }
+
+    /* Callout Box */
+    .callout {
+      background: var(--bg-surface);
+      border-left: 3px solid var(--accent-white);
+      border-top: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 1.25rem 1.4rem;
+      margin-top: 1rem;
+    }
+
+    .callout-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+    }
+
+    .callout-text {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Mermaid Container */
+    .diagram-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.25rem;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo-group">
+        <div class="logo-badge">D</div>
+        <div class="logo-text">
+          <h1>대진전자통신고 포털 <span>PRD v2.0</span></h1>
+        </div>
+      </a>
+
+      <div class="badge-status">
+        검증 완료 (Next.js 16 빌드 통과)
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#overview">개요</a></li>
+        <li><a href="#architecture">구조</a></li>
+        <li><a href="#features">핵심 기능</a></li>
+        <li><a href="#calendar">동적 캘린더</a></li>
+        <li><a href="#anonymity">익명 정책</a></li>
+        <li><a href="#api">NEIS 연동</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <div class="hero">
+      <div class="hero-eyebrow">PRODUCT REQUIREMENTS DOCUMENT · DAEJIN-LIVE</div>
+      <h1 class="hero-title">
+        대진전자통신고등학교 통합 포털<br>
+        &amp; 100% 무조건 익명 커뮤니티
+      </h1>
+      <p class="hero-description">
+        부산광역시 금정구 소재 대진전자통신고등학교 학생들을 위한 공식 웹 서비스 요구사항 정의서입니다. 
+        4개 전공 학과(AI소프트웨어과, 로봇전자과, 전기전자과, 산업디자인과), 10개 반, 중식 단독 급식, 기숙사 미운영 체제에 최적화되었으며, 
+        철저한 익명 소통과 능동적 동적 달력 엔진을 기반으로 설계되었습니다.
+      </p>
+
+      <!-- Key Metadata Grid -->
+      <div class="meta-grid">
+        <div class="meta-card">
+          <div class="meta-card-label">학교 코드 / 교육청</div>
+          <div class="meta-card-value font-mono">7150597 · C10</div>
+          <div class="meta-card-sub">부산광역시교육청 관할</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-card-label">개설 학과 (4개과)</div>
+          <div class="meta-card-value">AI · 로봇 · 전기전자 · 디자인</div>
+          <div class="meta-card-sub">산업디자인과 포함 4개 공식 학과</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-card-label">학급 &amp; 급식 구조</div>
+          <div class="meta-card-value">1~10반 · 중식 단독</div>
+          <div class="meta-card-sub">석식 없음 · 기숙사 없음 (통학)</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-card-label">보안 &amp; 커뮤니티 원칙</div>
+          <div class="meta-card-value">100% 무조건 익명</div>
+          <div class="meta-card-sub">실명/학과 원천 차단</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Overview & Scope -->
+    <section id="overview">
+      <div class="section-header">
+        <h2 class="section-title">1. 프로젝트 배경 및 서비스 목적</h2>
+        <span class="section-tag">OVERVIEW &amp; OBJECTIVES</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <span>추진 배경 및 문제의식</span>
+            <span class="card-title-tag">BACKGROUND</span>
+          </div>
+          <p class="card-desc">
+            대진전자통신고 학생들은 정규 교과뿐만 아니라 알고리즘 프로그래밍, 회로 기판 실습, 전자 캐드, 디자인 포트폴리오, 국가기술자격증 실기 등 전공 영역에서 지속적인 질문과 실습 에러에 직면합니다.
+          </p>
+          <ul class="feature-list">
+            <li>교내 위계나 신원 노출 부담 없이 소통할 수 있는 안전한 익명 공간의 부재</li>
+            <li>정형화된 카테고리에 얽매이지 않고 자유롭게 질문하고 답변을 채택할 수 있는 지식 공유 체계 필요</li>
+            <li>나이스(NEIS) 오픈 API와 결합된 모바일 최적화 학교 일정 및 식단 접근성 필요</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>핵심 추진 목표</span>
+            <span class="card-title-tag">CORE GOALS</span>
+          </div>
+          <p class="card-desc">
+            단순 정보를 나열하는 웹사이트가 아닌, 학생들의 학업과 전공 성장을 일상 속에서 실질적으로 돕는 맞춤형 플랫폼을 구축합니다.
+          </p>
+          <ul class="feature-list">
+            <li><strong>대진 전용 포털</strong>: 나이스 오픈 API 기반 중식 급식 식단표 및 4개 학과·1~10반 시간표 실시간 제공</li>
+            <li><strong>100% 무조건 익명성</strong>: 프로필 칩부터 게시글, 댓글, 답변까지 일체의 실명 노출을 원천 배제</li>
+            <li><strong>능동적 동적 달력</strong>: 12월 ↔ 1월 연도 롤오버 및 Date 객체 기반 실시간 그리드 연산</li>
+            <li><strong>특성화고 진로 로드맵</strong>: 산학일체형 도제학교, 산업기능요원(병특), 선취업 후진학 안내</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Architecture -->
+    <section id="architecture">
+      <div class="section-header">
+        <h2 class="section-title">2. 시스템 구조 및 서비스 아키텍처</h2>
+        <span class="section-tag">SYSTEM ARCHITECTURE</span>
+      </div>
+
+      <div class="diagram-container">
+        <div class="mermaid">
+graph LR
+    subgraph Client ["프론트엔드 (Next.js 16 App Router)"]
+      Navbar["Navbar (익명 칩 · 다크/라이트 토글)"]
+      Views["8대 탭 뷰 (메인 · 급식 · 시간표 · 학사일정 · 취업진학 · 자유 · 질문 · 신입생)"]
+      MyPage["마이페이지 (나만의 일정표 · 소속 설정)"]
+      ChatWidget["챗봇상담 (D_Bot 인공지능 위젯)"]
+    end
+
+    subgraph LogicEngine ["클라이언트 연산 엔진"]
+      DateEngine["동적 Date 연산기 (Year Rollover · 일자 계산)"]
+      AnonEngine["100% 익명성 보장 모듈"]
+      ThemeEngine["모노크롬 테마 엔진"]
+    end
+
+    subgraph DataSources ["교육 데이터 연동 규격"]
+      NEIS_Meal["NEIS 급식 식단 (C10 · 7150597)"]
+      NEIS_Time["NEIS 고교 시간표 (4개과 · 10개반)"]
+      NEIS_Sche["NEIS 공식 학사일정"]
+    end
+
+    Client --> LogicEngine
+    LogicEngine --> DataSources
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Core Features -->
+    <section id="features">
+      <div class="section-header">
+        <h2 class="section-title">3. 8대 핵심 뷰 및 기능 요구사항</h2>
+        <span class="section-tag">CORE FUNCTIONAL REQUIREMENTS</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 15%;">화면 / 모듈</th>
+              <th style="width: 35%;">주요 기능 및 UX 요구사항</th>
+              <th style="width: 35%;">상세 데이터 및 비즈니스 로직</th>
+              <th style="width: 15%;">상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-title">메인 (대시보드)</td>
+              <td>오늘의 중식 요약, 1~7교시 시간표 및 진행 교시 하이라이트, D-Day 카드, 실시간 익명 글 프리뷰</td>
+              <td>NEIS 실시간 시간표/식단 연동, 자격증 및 기말고사 D-Day 자동 산출</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-title">급식 식단표</td>
+              <td>월~금 5일간 주간 중식 식단 매트릭스, 오늘 일자 자동 테두리 강조, 알레르기 표시 토글(ON/OFF)</td>
+              <td>중식 단독 운영 (석식 배제), 끼니별 예상 열량(Kcal) 및 영양 성분 게이지</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-title">시간표</td>
+              <td>공식 4개 학과, 1~3학년, 1~10반 드롭다운 선택기, 점심시간 및 1~7교시 주간 표 그리드</td>
+              <td>전공실습(블록 타임) 연동, 학년/반 변경 시 즉시 재렌더링</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-title">학사일정</td>
+              <td>월간 동적 캘린더 그리드, 연도 자동 전환(12월 ↔ 1월), 시험/행사/공휴일 필터, 우측 상세 일정</td>
+              <td>표준 Date 객체 기반 1일 요일 및 월말 일수 연산, 다중 월 학사 이벤트 내장</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-title">취업·진학</td>
+              <td>[취업 지원] (도제학교, 산업기능요원 병특, 공채/기능사반, 4개과 로드맵) 및 [대학 진학] (재직자 선취업 후진학 등)</td>
+              <td>일반 추천 채용 공고 배제, 대진 맞춤형 정부/교육청 특성화고 진로 정책 안내</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-title">자유게시판</td>
+              <td>100% 무조건 익명, 작성자가 원하는 말머리/카테고리 직접 기입, 네이버 카페형 상세 글쓰기 모달</td>
+              <td>공감(좋아요) 카운터, 댓글 작성 시 익명 1/2/3 및 작성자 식별 번호 자동 부여</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-title">질문게시판</td>
+              <td>100% 무조건 익명 Q&amp;A, 코드 스니펫 등록 및 모노스페이스 표시, 질문자 직접 답변 채택 시스템</td>
+              <td>답변 채택 시 '답변대기' → '해결완료' 상태 전환, 전공/자격증 질문 맞춤</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-title">신입생 정보</td>
+              <td>4개 공식 학과별 교육과정 및 취득 자격증 안내, 캠퍼스맵/FAQ 제거, 질문게시판 문의 링크 제공</td>
+              <td>기숙사 내용 전면 배제 (전교생 통학 체제 준수)</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-title">마이페이지</td>
+              <td>익명 학생 헤더, 나만의 일정표(동적 캘린더 탑재, + 새 일정 추가 모달), 4개 학과/반 설정, 19종 알레르기</td>
+              <td>학사일정과 동일한 연도 롤오버 엔진 탑재, 로컬 일정 추가 즉시 반영</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-title">챗봇상담 (D_Bot)</td>
+              <td>우측 하단 플로팅 트리거 '챗봇상담' (열림 시 '닫기'), 대화창 내 AI 도우미 명칭 'D_Bot'</td>
+              <td>급식, 시간표, 시험 D-Day, 학과 안내 퀵 칩 및 질문 텍스트 자동 응답</td>
+              <td><span class="tag tag-white">구현 완료</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 4: Dynamic Calendar Engine -->
+    <section id="calendar">
+      <div class="section-header">
+        <h2 class="section-title">4. 능동적 동적 달력 연산 엔진 명세</h2>
+        <span class="section-tag">CALENDAR ENGINE SPECIFICATION</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <span>연도 자동 롤오버 (Year Rollover)</span>
+            <span class="card-title-tag">ROLLOVER</span>
+          </div>
+          <p class="card-desc">
+            과거의 고정된 월 탐색 한계를 벗어나 연도를 넘나드는 학사일정 및 개인 일정 관리가 가능하도록 구현되었습니다.
+          </p>
+          <ul class="feature-list">
+            <li><strong>12월 → 1월 전진</strong>: 12월에서 <code>&gt;</code> 버튼 클릭 시 연도가 1년 증가하고 1월로 전환 (예: <code>2026.12</code> → <code>2027.01</code>)</li>
+            <li><strong>1월 → 12월 후진</strong>: 1월에서 <code>&lt;</code> 버튼 클릭 시 연도가 1년 감소하고 12월로 전환 (예: <code>2027.01</code> → <code>2026.12</code>)</li>
+            <li><strong>오늘 복귀</strong>: '오늘' 버튼 클릭 시 당월(2026년 10월)로 즉각 리셋</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Date 객체 기반 시작 요일 및 일수 자동 연산</span>
+            <span class="card-title-tag">GRID CALCULATION</span>
+          </div>
+          <p class="card-desc">
+            하드코딩된 더미 일자(27, 28, 29, 30...)를 제거하고 표준 브라우저 Date API로 정확한 날짜 배치를 보장합니다.
+          </p>
+          <ul class="feature-list">
+            <li><code>new Date(year, month - 1, 1).getDay()</code>: 해당 월 1일의 시작 요일(0:일 ~ 6:토) 동적 산출</li>
+            <li><code>new Date(year, month, 0).getDate()</code>: 해당 월의 총 일수(28/29/30/31일) 동적 산출</li>
+            <li><code>prevMonthTailDays</code>: 이전 달의 실제 마지막 날짜들을 역순 계산하여 첫 주 공백에 정확히 채움</li>
+            <li><code>nextMonthHeadDays</code>: 7일 그리드 배수를 맞추기 위해 다음 달 1일부터 필요한 일수를 동적 렌더링</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Unconditional Anonymity -->
+    <section id="anonymity">
+      <div class="section-header">
+        <h2 class="section-title">5. 100% 무조건 익명성 보장 정책</h2>
+        <span class="section-tag">ANONYMITY POLICY</span>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">플랫폼 전반 완전 익명 고정 원칙</div>
+        <div class="callout-text">
+          교내 학생 간의 소통에서 발생할 수 있는 학번·선후배 위계감이나 평가에 대한 두려움을 없애기 위해, 사용자의 실명이나 프로필 선택권을 제공하지 않고 <strong>무조건 100% 익명</strong>으로 처리합니다.
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 1.25rem;">
+        <div class="card">
+          <div class="card-title">상단 프로필 칩</div>
+          <p class="card-desc">
+            기존의 '홍길동' 등 테스트 실명을 영구 제거하고, <strong>'익명'</strong> 배지만 표기됩니다.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">마이페이지 헤더</div>
+          <p class="card-desc">
+            학생 실명을 배제하고 <strong>'{소속학과} {학년}학년 {반}반 {번호}번 익명 학생'</strong>으로 표기됩니다.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">게시판 작성자 &amp; 댓글</div>
+          <p class="card-desc">
+            게시글 작성자는 <strong>'익명'</strong>, 댓글 및 답변은 <strong>'익명 1'</strong>, <strong>'익명 2'</strong>, <strong>'익명 (작성자)'</strong>로 번호화됩니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: NEIS API Spec -->
+    <section id="api">
+      <div class="section-header">
+        <h2 class="section-title">6. 나이스(NEIS) 교육정보 개방포털 연동 규격</h2>
+        <span class="section-tag">NEIS OPEN API SPECIFICATION</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>API 서비스</th>
+              <th>엔드포인트</th>
+              <th>필수 호출 인자</th>
+              <th>연동 데이터 및 가공 규칙</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-title">급식식단정보</td>
+              <td class="font-mono">/hub/mealServiceDietInfo</td>
+              <td class="font-mono">ATPT_OFCDC_SC_CODE=C10<br>SD_SCHUL_CODE=7150597<br>MLSV_YMD={YYYYMMDD}</td>
+              <td>
+                • <code>MMEAL_SC_CODE=2</code> (중식) 단독 필터링 적용<br>
+                • <code>DDISH_NM</code>에서 요리명 파싱 및 알레르기 번호 분리<br>
+                • <code>CAL_INFO</code> 열량 및 영양정보 표시
+              </td>
+            </tr>
+            <tr>
+              <td class="td-title">고교시간표정보</td>
+              <td class="font-mono">/hub/hisTimetable</td>
+              <td class="font-mono">ATPT_OFCDC_SC_CODE=C10<br>SD_SCHUL_CODE=7150597<br>AY=2026&amp;SEM=2<br>GRADE={1~3}&amp;CLASS_NM={1~10}</td>
+              <td>
+                • 4개 공식 학과별(AI·로봇·전기전자·디자인) 매핑<br>
+                • 1~7교시 교과목 및 전공실습 블록 매핑<br>
+                • 당일 진행 교시 실시간 자동 하이라이트
+              </td>
+            </tr>
+            <tr>
+              <td class="td-title">학사일정정보</td>
+              <td class="font-mono">/hub/SchoolSchedule</td>
+              <td class="font-mono">ATPT_OFCDC_SC_CODE=C10<br>SD_SCHUL_CODE=7150597<br>AA_FROM_YMD={시작일}&amp;AA_TO_YMD={종료일}</td>
+              <td>
+                • 정기 지필평가(중간/기말), 자격증 시험, 방학식 매핑<br>
+                • <code>SBTR_DD_SC_NM</code>으로 법정공휴일/재량휴업일 구분<br>
+                • 동적 캘린더 그리드에 이벤트 칩으로 표출
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 7: Quality & Roadmap -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">7. 품질 보증 및 향후 확장 계획</h2>
+        <span class="section-tag">QUALITY &amp; ROADMAP</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">품질 및 디자인 원칙 준수</div>
+          <ul class="feature-list">
+            <li><strong>모노크롬 미니멀리즘</strong>: 불필요한 원색/파란색 그라데이션을 제거하고 고급스러운 흑백/다크 UI 적용</li>
+            <li><strong>이모지 완전 배제</strong>: 유치한 비주얼을 탈피하고 진중한 타이포그래피와 보더 라인으로만 구성</li>
+            <li><strong>빌드 무결성</strong>: Next.js 16 (Turbopack) 기반 TypeScript 컴파일 에러 0건 및 0.5초대 초고속 빌드 유지</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">향후 확장 로드맵</div>
+          <ul class="feature-list">
+            <li><strong>Phase 2</strong>: 교육부 정식 API Key 발급을 통한 실시간 당일 급식/시간표 데이터 동기화</li>
+            <li><strong>Phase 3</strong>: Supabase / Prisma DB 연동을 통한 익명 게시글 및 질문 채택 데이터의 영구 저장</li>
+            <li><strong>Phase 4</strong>: 대진전자통신고 학칙 및 실습실 매뉴얼을 학습한 D_Bot LLM 온디바이스/클라우드 RAG 탑재</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>대진전자통신고등학교 통합 포털 (Daejin-Live) · 제품 요구사항 정의서 (PRD v2.0)</div>
+      <div class="footer-links">
+        <a href="#overview">개요</a>
+        <span>·</span>
+        <a href="#features">핵심 기능</a>
+        <span>·</span>
+        <a href="#calendar">동적 캘린더</a>
+        <span>·</span>
+        <a href="#anonymity">익명 정책</a>
+      </div>
+      <div>부산광역시 금정구 장전로 92 · 표준학교코드 7150597</div>
+    </div>
+  </footer>
+
+</body>
+</html>

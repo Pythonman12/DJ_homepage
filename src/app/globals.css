@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --bg-page: #FFFFFF;
+    --bg-surface: #F8FAFC;
+    --bg-elevated: #FFFFFF;
+    --border-color: #E2E8F0;
+    --border-strong: #CBD5E1;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-tertiary: #94A3B8;
+    --accent: #2563EB;
+    --accent-light: #EFF6FF;
+    --skeleton: #F1F5F9;
+  }
+
+  .dark {
+    --bg-page: #09090B;
+    --bg-surface: #121215;
+    --bg-elevated: #18181B;
+    --border-color: #27272A;
+    --border-strong: #3F3F46;
+    --text-primary: #FAFAFA;
+    --text-secondary: #A1A1AA;
+    --text-tertiary: #71717A;
+    --accent: #3B82F6;
+    --accent-light: #1E293B;
+    --skeleton: #27272A;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Inter", "Segoe UI", sans-serif;
+    line-height: 1.5;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+/* Minimal Wireframe Box */
+.wireframe-box {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.wireframe-box-subtle {
+  background-color: var(--bg-surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: 6px;
+}
+
+/* Skeleton Placeholder Utility */
+.skeleton-line {
+  background-color: var(--skeleton);
+  border-radius: 4px;
+}
